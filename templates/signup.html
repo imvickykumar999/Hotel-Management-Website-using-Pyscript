@@ -1,0 +1,82 @@
+{% extends "base.html"%}
+{% block content %}
+
+<!doctype html5>
+<html>
+  <head>
+    <title>Sign Up</title>
+  </head>
+
+  <body>
+    <center>
+      <div class="jumbotron">
+        <div class="container">
+          <div class="alert alert-light" role="alert">
+
+            <div class="alert alert-primary" role="alert">
+              <h2>SignUp 
+                <span style="color: red;">
+                  Here
+                </span>
+              </h2>
+            </div>
+
+            <div class="alert alert-warning" role="alert">
+              <br>
+              <form id="signup" action="{{ url_for('signup')}}" method="post">
+                <div class="alert alert-success" role="alert">
+                  <br>
+                  <h5>Enter Username</h5>
+                  <input type="text" id="username" name="username" />
+                  <br><br><br>
+                  
+                  <h5>Set Password</h5>
+                  <input type="password" id="password" name="password" />
+                  <br><br><br>
+                </div>
+
+                <!-- <input type="submit" id="submit" text="Signup" /> -->
+              
+                <br>
+                <input type="image"
+                  src="../static/submit.png"
+                  width="200"
+                  height="60"
+                  alt="submit"/>
+              </form>
+            </div>
+
+            {% with messages = get_flashed_messages() %}
+              {% if messages %}
+                <ul class=flashes>
+                {% for message in messages %}
+                  <li>
+                    <h2>
+                      {{ message }}
+                    </h2>
+                  </li>
+                {% endfor %}
+                </ul>
+              {% endif %}
+            {% endwith %}
+
+            <br>
+            <div class="alert alert-danger" role="alert">
+              <h4>
+                Already have account ?
+                <br>
+
+                <a href="{{ url_for('login') }}">
+                  Login <span style="color: red;">here</span>
+                </a>
+              </h4>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </center>
+  </body>
+</html>
+
+{% endblock %}
