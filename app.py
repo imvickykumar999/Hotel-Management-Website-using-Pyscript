@@ -48,10 +48,15 @@ def payment(username):
     from mydatabase import fire
     _path = 'Hotel/Database/Rooms'
     mydata = fire.call(_path)
+    new_dict = {}
+    for k, d in mydata.items():
+        if d == 'empty':
+            new_dict[k] = d
 
     return render_template("payment.html",
                             username=username,
-                            mydata=mydata,
+                            passdict={},
+                            mydata=new_dict,
                         )
 
 
@@ -73,9 +78,10 @@ def payments(username):
     expyear     = request.form['expyear']
     cvv         = request.form['cvv']
 
-    cardtype    = request.form.get('cardtype') # Payment Type Check
-    VIP         = request.form.get('VIP') # VIP Condition
-    daymonth    = request.form.get('daymonth') # month Condition
+    cardtype    = request.form.get('cardtype')  # Payment Type Check
+    banks       = request.form.get('banks')     # Banks Type Check
+    VIP         = request.form.get('VIP')       # VIP Condition
+    daymonth    = request.form.get('daymonth')  # month Condition
 
     from mydatabase import fire
     import random
@@ -110,7 +116,7 @@ def payments(username):
 
 # ----------------------------------
 
-    price = 10000 # per room price
+    price = bank_price = month_price = card_price = validated_price = 10000 # per room price
     _path = f'Hotel/Database/Customer/{ename+domain}'
     persontype = fire.call(_path)
 
@@ -122,47 +128,62 @@ def payments(username):
     
     if percentage_room_booked < 50.0:
         if VIP == 'on':
-            discount = 25
-            price -= price*discount/100
+            validation = 25
 
-        if persontype <= 5:
-            discount = 10
-            price -= price*discount/100
+        elif persontype <= 5:
+            validation = 10
 
         elif persontype > 5:
-            discount = 20
-            price -= price*discount/100
+            validation = 20
+        validated_price -= price*validation/100
 
     if percentage_room_booked > 80.0:
         if persontype <= 5:
-            increased = 40
+            validation = 40
 
         elif persontype > 5:
-            increased = 10
-        price += price*increased/100
+            validation = 10
+        validated_price += price*validation/100
 
     daymonth = int(daymonth.split('-')[1])
     print('===(month)===> ', daymonth)
 
+    validated_month = 0
     if daymonth in [12, 1, 2]:
-        increased = 40
-        price += price*increased/100
+        validated_month = 40
+    month_price += validated_price*validated_month/100
 
-    print('===(cardtype)===> ', cardtype)
+    print('===(banks)===> ', banks)
     if cardtype == 'Credit':
-        discount = 10
-        price -= price*discount/100
+        card_discount = 10
+        card_price -= month_price*card_discount/100
+
+        if banks == 'Axis':
+            bank_discount = 2
+            bank_price -= card_price*bank_discount/100
+
+        elif banks == 'IndusInd':
+            bank_discount = 3
+            bank_price -= card_price*bank_discount/100
+
+        elif banks == 'HDFC':
+            bank_discount = 4
+            bank_price -= card_price*bank_discount/100
+
+        elif banks == 'State':
+            bank_discount = 5
+            bank_price -= card_price*bank_discount/100
 
     if cardtype == 'Debit':
-        if persontype <= 5:
-            discount = 1
-            price -= price*discount/100
-
         if VIP == 'on':
-            discount = 4
-            price -= price*discount/100
+            card_discount = 4
+            bank_price -= month_price*card_discount/100
 
-    print('===(price)===> ', price)
+        elif persontype <= 5:
+            card_discount = 1
+            bank_price -= month_price*card_discount/100
+
+    print('===(bank_price)===> ', bank_price)
 
 # ----------------------------------
 
@@ -184,6 +205,17 @@ def payments(username):
         'persontype' : persontype,
         'VIP' : VIP,
         'order_ID' : order_ID,
+
+        'price' : price,
+        'card_price' : card_price,
+        'validated_price' : validated_price,
+        'month_price' : month_price,
+        'bank_price' :bank_price,
+
+        'validation' : validation,
+        'validated_month' : validated_month,
+        'card_discount' : card_discount,
+        'bank_discount' : bank_discount,
     }
 
     _path = f'Hotel/Database/Form/{order_ID}'
@@ -191,6 +223,7 @@ def payments(username):
 
     return render_template(
         "payment.html",
+        passdict=passdict,
         username=username,
         mydata=new_dict,
     )

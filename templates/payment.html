@@ -117,113 +117,128 @@
 
   <body>
     <center>
-        <div class="row">
-            <div class="col-75">
-                <div class="container">
-                    <form method="post" action="{{url_for('payments', username=username)}}">
-                
-                        <div class="row">
-                            <div class="col-50">
-                                <h3>Billing Address</h3>
-                                
-                                <label for="fname"><i class="fa fa-user"></i> Full Name</label>
-                                <input type="text" id="fname" name="firstname" placeholder="John M. Doe">
-                                <label for="email"><i class="fa fa-envelope"></i> Email</label>
-                                <input type="text" id="email" name="emailid" placeholder="john@example.com">
-                                <label for="adr"><i class="fa fa-address-card-o"></i> Address</label>
-                                <input type="text" id="adr" name="address" placeholder="542 W. 15th Street">
-                                <label for="city"><i class="fa fa-institution"></i> City</label>
-                                <input type="text" id="city" name="city" placeholder="New York">
+
+        {% if not passdict %}
+            <div class="row">
+                <div class="col-75">
+                    <div class="container">
+                        <form method="post" action="{{url_for('payments', username=username)}}">
                     
-                                <div class="row">
+                            <div class="row">
                                 <div class="col-50">
-                                    <label for="state">State</label>
-                                    <input type="text" id="state" name="state" placeholder="NY">
+                                    <h3>Billing Address</h3>
+                                    
+                                    <label for="fname"><i class="fa fa-user"></i> Full Name</label>
+                                    <input type="text" id="fname" name="firstname" placeholder="John M. Doe" required>
+                                    <label for="email"><i class="fa fa-envelope"></i> Email</label>
+                                    <input type="text" id="email" name="emailid" placeholder="john@example.com" required>
+                                    <label for="adr"><i class="fa fa-address-card-o"></i> Address</label>
+                                    <input type="text" id="adr" name="address" placeholder="542 W. 15th Street" required>
+                                    <label for="city"><i class="fa fa-institution"></i> City</label>
+                                    <input type="text" id="city" name="city" placeholder="New York" required>
+                        
+                                    <div class="row">
+                                    <div class="col-50">
+                                        <label for="state">State</label>
+                                        <input type="text" id="state" name="state" placeholder="NY" required>
+                                    </div>
+                                    <div class="col-50">
+                                        <label for="zip">Zip</label>
+                                        <input type="text" id="zip" name="zip" placeholder="10001" required>
+                                    </div>
+                                    </div>
                                 </div>
+                        
                                 <div class="col-50">
-                                    <label for="zip">Zip</label>
-                                    <input type="text" id="zip" name="zip" placeholder="10001">
-                                </div>
-                                </div>
-                            </div>
-                    
-                            <div class="col-50">
-                                <h3>Payment</h3>
+                                    <h3>Payment</h3>
 
-                                <label for="cname">Name on Card</label>
-                                <input type="text" id="cname" name="cardname" placeholder="John More Doe">
-                                
-                                <label>Select Card Type</label>
-                                <div class="row">
-                                    <div class="col-50">
-                                        <input type="radio" id="html" name="cardtype" value="Debit">
-                                        <label for="html">Debit Card</label><br>
+                                    <label for="cname">Name on Card</label>
+                                    <input type="text" id="cname" name="cardname" placeholder="John More Doe" required>
+                                    
+                                    <div class="row">
+                                        <div class="col-50">
+                                            <label for="cardtype">Choose Card Type:</label>
+                                            <select name="cardtype" id="cardtype">
+                                                <option value="Debit">Debit</option>
+                                                <option value="Credit">Credit</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-50">
+                                            <label for="banks">Choose a Bank:</label>
+                                            <select name="banks" id="banks">
+                                                <option value="Axis">Axis Bank</option>
+                                                <option value="IndusInd">IndusInd Bank</option>
+                                                <option value="HDFC">HDFC Bank</option>
+                                                <option value="State">State Bank of India</option>
+                                            </select>
+                                        </div>
                                     </div>
 
-                                    <div class="col-50">
-                                        <input type="radio" id="css" name="cardtype" value="Credit">
-                                        <label for="css">Credit Card</label><br>
-                                    </div>
-                                </div>
+                                    <br><br>
+                                    <label for="ccnum">Card number</label>
+                                    <input type="text" id="ccnum" name="cardnumber" placeholder="1111-2222-3333-4444" required>
+                                    <label for="expmonth">Exp Month</label>
+                                    <input type="text" id="expmonth" name="expmonth" placeholder="September" required>
+                        
+                                    <div class="row">
+                                        <div class="col-50">
+                                            <label for="expyear">Exp Year</label>
+                                            <input type="text" id="expyear" name="expyear" placeholder="2018" required>
+                                        </div>
 
-                                <label for="ccnum">Card number</label>
-                                <input type="text" id="ccnum" name="cardnumber" placeholder="1111-2222-3333-4444">
-                                <label for="expmonth">Exp Month</label>
-                                <input type="text" id="expmonth" name="expmonth" placeholder="September">
-                    
-                                <div class="row">
-                                    <div class="col-50">
-                                        <label for="expyear">Exp Year</label>
-                                        <input type="text" id="expyear" name="expyear" placeholder="2018">
-                                    </div>
-
-                                    <div class="col-50">
-                                        <label for="cvv">CVV</label>
-                                        <input type="text" id="cvv" name="cvv" placeholder="352">
+                                        <div class="col-50">
+                                            <label for="cvv">CVV</label>
+                                            <input type="text" id="cvv" name="cvv" placeholder="352" required>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <h2>Select Rooms</h2>
-                        <table>
-                            <tr>
-                                <th>Room Number</th>
-                                <th>Checkbox</th>
-                            </tr>
+                            <h2>Select Rooms</h2>
+                            <table>
+                                <tr>
+                                    <th>Room Number</th>
+                                    <th>Checkbox</th>
+                                </tr>
 
-                            <fieldset>    
-                                {% for i,j in mydata.items() %}
-                                    <tr>
-                                        <td>{{i}}</td>
-                                        <td>
-                                            <input type="checkbox" name="{{i}}" value="{{i}}">
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                            </fieldset>
-                        </table>
+                                <fieldset>    
+                                    {% for i,j in mydata.items() %}
+                                        <tr>
+                                            <td>{{i}}</td>
+                                            <td>
+                                                <input type="checkbox" name="{{i}}" value="{{i}}">
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </fieldset>
+                            </table>
 
-                        <br>
-                        <div class="row">
-                            <div class="col-50">
-                                <label>
-                                    <input type="checkbox" name="VIP" value="on"> Is VIP ?
-                                </label>
+                            <br>
+                            <div class="row">
+                                <div class="col-50">
+                                    <label>
+                                        <input type="checkbox" name="VIP" value="on"> Is VIP ?
+                                    </label>
+                                </div>
+
+                                <div class="col-50">
+                                    <label for="daymonth">Select This Month
+                                        <br>
+                                        <input type="month" id="daymonth" name="daymonth">
+                                    </label>
+                                </div>
                             </div>
-
-                            <div class="col-50">
-                                <label for="daymonth">Select This Month
-                                    <br>
-                                    <input type="month" id="daymonth" name="daymonth">
-                                </label>
-                            </div>
-                        </div>
-                        <input type="submit" value="Continue to checkout" class="btn">
-                    </form>
+                            <input type="submit" value="Continue to checkout" class="btn">
+                        </form>
+                    </div>
                 </div>
             </div>
-        </div>
+
+        {% else %}
+            {{passdict}}
+        {% endif %}
+
     </center>
   </body>
 </html>
