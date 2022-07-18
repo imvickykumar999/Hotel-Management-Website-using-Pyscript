@@ -236,8 +236,24 @@
             </div>
 
         {% else %}
-            {{passdict}}
+            <!-- {{passdict}} -->
+
+            <table>
+                {% for key, value in passdict.items() %}
+                   <tr>
+                      <th>
+                        <h4>{{ key }}</h4>
+                      </th>
+
+                      <td>
+                        <h4>{{ value }}</h4>
+                      </td>
+                   </tr>
+                {% endfor %}
+            </table>
+
         {% endif %}
+        <br><br>
 
     </center>
   </body>

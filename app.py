@@ -188,34 +188,34 @@ def payments(username):
 # ----------------------------------
 
     passdict = {
-        'firstname' : firstname,
-        'emailid' : emailid,
-        'address' : address,
-        'city' : city,
-        'state' : state,
-        'zip' : zip,
+        'firstname'        : firstname,
+        'emailid'          : emailid,
+        'address'          : address,
+        'city'             : city,
+        'state'            : state,
+        'zip'              : zip,
 
-        'cardname' : cardname,
-        'cardnumber' : cardnumber,
-        'expmonth' : expmonth,
-        'expyear' : expyear,
-        'cvv' : cvv,
+        'cardname'         : cardname,
+        'cardnumber'       : cardnumber,
+        'expmonth'         : expmonth,
+        'expyear'          : expyear,
+        'cvv'              : cvv,
 
-        'cardtype' : cardtype,
-        'persontype' : persontype,
-        'VIP' : VIP,
-        'order_ID' : order_ID,
+        'cardtype'         : cardtype,
+        'persontype'       : persontype,
+        'VIP'              : VIP,
+        'order_ID'         : order_ID,
 
-        'price' : price,
-        'card_price' : card_price,
-        'validated_price' : validated_price,
-        'month_price' : month_price,
-        'bank_price' :bank_price,
+        'price'            : price,
+        'card_price'       : card_price,
+        'validated_price'  : validated_price,
+        'month_price'      : month_price,
+        'bank_price'       : bank_price,
 
-        'validation' : validation,
-        'validated_month' : validated_month,
-        'card_discount' : card_discount,
-        'bank_discount' : bank_discount,
+        'validation'       : validation,
+        'validated_month'  : validated_month,
+        'card_discount'    : card_discount,
+        'bank_discount'    : bank_discount,
     }
 
     _path = f'Hotel/Database/Form/{order_ID}'
