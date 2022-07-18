@@ -2,8 +2,6 @@
 from firebase_admin import credentials
 
 cred = credentials.Certificate('mydatabase/cred.json')
-# cred = credentials.Certificate('cred.json')
-
 url = 'https://neosalpha-999-default-rtdb.firebaseio.com/'
 path = {'databaseURL' : url}
 
@@ -16,10 +14,15 @@ if not firebase_admin._apps:
 from firebase_admin import db
 
 
-def call():
-    refv = db.reference('Hotel/Database/Rooms')
+def call(_path):
+    refv = db.reference(_path)
     name = refv.get()
     return name
+
+
+def sets(_path, jsondict):
+    refv = db.reference(_path)
+    refv.set(jsondict)
 
 
 # -----------------( SAMPLE DATA ENTRY )----------------------------
@@ -28,29 +31,10 @@ def call():
 #     import random
 
 #     for i in range(1, 21):
-#         status = ['booked', 'empty']
-#         ran = random.randint(1,2)
-
-#         data = status[ran%2]
 #         refv = db.reference(f'Hotel/Database/Rooms/room_{i}')
-#         refv.set(data)
+#         refv.set('empty')
 
-
-# def sample_customer():
-#     import random
-
-#     for _ in range(1, 11):
-#         ran = random.randint(1,11)
-#         cid = random.randint(1000,9999)
-
-#         data = {'booked': ran}
-#         refv = db.reference(f'Hotel/Database/Customer/{cid}')
-#         refv.set(data)
-
-
-# sample_customer()
 # sample_room()
-
 # refv = db.reference('Hotel/Database')
 # name = refv.get()
 # print(name)
