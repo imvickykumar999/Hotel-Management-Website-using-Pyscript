@@ -102,7 +102,6 @@
         color: grey;
         }
 
-        /* Responsive layout - when the screen is less than 800px wide, make the two columns stack on top of each other instead of next to each other (and change the direction - make the "cart" column go on top) */
         @media (max-width: 800px) {
         .row {
             flex-direction: column-reverse;
@@ -127,6 +126,7 @@
                             <div class="row">
                                 <div class="col-50">
                                     <h3>Billing Address</h3>
+                                    <br>
                                     
                                     <label for="fname"><i class="fa fa-user"></i> Full Name</label>
                                     <input type="text" id="fname" name="firstname" placeholder="John M. Doe" required>
@@ -151,6 +151,7 @@
                         
                                 <div class="col-50">
                                     <h3>Payment</h3>
+                                    <br>
 
                                     <label for="cname">Name on Card</label>
                                     <input type="text" id="cname" name="cardname" placeholder="John More Doe" required>
@@ -195,7 +196,10 @@
                                 </div>
                             </div>
 
+                            <br>
                             <h2>Select Rooms</h2>
+                            <br>
+
                             <table>
                                 <tr>
                                     <th>Room Number</th>
@@ -218,14 +222,15 @@
                             <div class="row">
                                 <div class="col-50">
                                     <label>
-                                        <input type="checkbox" name="VIP" value="on"> Is VIP ?
+                                        <br>
+                                        <input type="checkbox" name="VIP" value="Yes"> Is VIP ?
                                     </label>
                                 </div>
 
                                 <div class="col-50">
                                     <label for="daymonth">Select This Month
                                         <br>
-                                        <input type="month" id="daymonth" name="daymonth">
+                                        <input type="date" id="daymonth" name="daymonth">
                                     </label>
                                 </div>
                             </div>
@@ -236,8 +241,41 @@
             </div>
 
         {% else %}
-            <!-- {{passdict}} -->
 
+            <img src="/static/thanks.jpg" alt="thanks.jpg">
+            <br><br>
+
+            <!-- 
+            {{passdict['firstname']}} is a {{passdict['person_status']}}.
+            <br><br>
+            Initial Price of each room was 10000 INR.
+            <br>
+            Since, {{passdict['%_room_booked']}}% of rooms are booked.
+            <br><br>
+            Means, Discount will be {{passdict['validation']}}% 
+            <br>
+            So, Price per room becomes {{passdict['validated_price']}} INR.
+            <br><br>
+            After Month Validation, Price per room is {{passdict['month price']}} INR.
+            <br><br>
+            Since, Payment type is {{passdict['cardtype']}} Card.
+            <br>
+            Card Discount will be {{passdict['card_discount']}}%.
+            <br>
+            {% if passdict['cardtype'] == 'Credit' %}
+                and, Bank is {{passdict['banks']}}.
+                <br>
+                Bank Discount will be {{passdict['bank_discount']}}%.
+            {% endif %}
+            <br>
+            Now, Price per room becomes {{passdict['bank_price']}} INR.
+            <br><br>
+            Total rooms booked is {{passdict['counter']}},
+            <br>
+            So, Final Price is {{passdict['final_price']}} INR.     
+            <br><br> 
+            -->
+ 
             <table>
                 {% for key, value in passdict.items() %}
                    <tr>
@@ -250,7 +288,7 @@
                       </td>
                    </tr>
                 {% endfor %}
-            </table>
+            </table> 
 
         {% endif %}
         <br><br>

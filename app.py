@@ -1,6 +1,4 @@
 
-from dis import disco
-import email
 from flask import Flask, render_template, request, \
 url_for, redirect, flash, session, abort
 
@@ -33,11 +31,24 @@ def index(username):
 
     from mydatabase import fire
     _path = 'Hotel/Database/Rooms'
-    mydata = fire.call(_path)
-    return render_template('index.html', 
-                            mydata=mydata,
-                            username=username
-                           )
+    booked_room = fire.call(_path)
+
+    new_dict = {}
+    for k, d in booked_room.items():
+        if d == 'empty':
+            new_dict[k] = d
+
+    count = sum(map(lambda x : x == 'booked',
+             list(booked_room.values())))
+
+    percentage_room_booked = 100*count/len(booked_room)
+
+    return render_template(
+        'index.html', 
+        mydata=booked_room,
+        percentage_room_booked=percentage_room_booked,
+        username=username
+    )
 
 
 @app.route("/payment/<username>", methods=["GET"])
@@ -106,19 +117,32 @@ def payments(username):
         if d == 'empty':
             new_dict[k] = d
 
+    counter = 0
     for i in new_dict:
         room = request.form.get(i)
         print('===(room)===> ', room)
 
         if room != None:
             _path = f'Hotel/Database/Rooms/{room}'
+            counter+=1
             fire.sets(_path, 'booked')
 
 # ----------------------------------
 
     price = bank_price = month_price = card_price = validated_price = 10000 # per room price
+    card_discount = bank_discount = validated_month = validation = 0
+
     _path = f'Hotel/Database/Customer/{ename+domain}'
     persontype = fire.call(_path)
+
+    if VIP == 'Yes':
+        person_status = 'VIP Customer'
+    elif persontype <= 5:
+        person_status = 'New Customer'
+        VIP = 'No'
+    else:
+        person_status = 'Regular Customer'
+        VIP = 'No'
 
     count = sum(map(lambda x : x == 'booked',
              list(booked_room.values())))
@@ -127,7 +151,7 @@ def payments(username):
     print('===(percentage_room_booked)===> ', percentage_room_booked)
     
     if percentage_room_booked < 50.0:
-        if VIP == 'on':
+        if VIP == 'Yes':
             validation = 25
 
         elif persontype <= 5:
@@ -145,11 +169,10 @@ def payments(username):
             validation = 10
         validated_price += price*validation/100
 
-    daymonth = int(daymonth.split('-')[1])
-    print('===(month)===> ', daymonth)
+    month = int(daymonth.split('-')[1])
+    print('===(month)===> ', month)
 
-    validated_month = 0
-    if daymonth in [12, 1, 2]:
+    if month in [12, 1, 2]:
         validated_month = 40
     month_price += validated_price*validated_month/100
 
@@ -175,20 +198,23 @@ def payments(username):
             bank_price -= card_price*bank_discount/100
 
     if cardtype == 'Debit':
-        if VIP == 'on':
+        if VIP == 'Yes':
             card_discount = 4
             bank_price -= month_price*card_discount/100
 
         elif persontype <= 5:
             card_discount = 1
             bank_price -= month_price*card_discount/100
+        else:
+            bank_price = month_price
 
-    print('===(bank_price)===> ', bank_price)
+    print('===(bank_price x total_rooms)===> ', bank_price*counter)
 
 # ----------------------------------
 
-    passdict = {
+    upload_dict = {
         'firstname'        : firstname,
+        'person_status'    : person_status,
         'emailid'          : emailid,
         'address'          : address,
         'city'             : city,
@@ -205,13 +231,18 @@ def payments(username):
         'persontype'       : persontype,
         'VIP'              : VIP,
         'order_ID'         : order_ID,
+        '%_room_booked'    : percentage_room_booked,
 
-        'price'            : price,
-        'card_price'       : card_price,
-        'validated_price'  : validated_price,
-        'month_price'      : month_price,
-        'bank_price'       : bank_price,
+        'price'            : "%.2f" % price,
+        'card_price'       : "%.2f" % card_price,
+        'validated_price'  : "%.2f" % validated_price,
+        'month price'      : "%.2f" % month_price,
+        'bank_price'       : "%.2f" % bank_price,
+        'final_price'      : "%.2f" % (bank_price*counter),
 
+        'counter'          : counter,
+        'banks'            : banks,
+        'daymonth'         : daymonth,
         'validation'       : validation,
         'validated_month'  : validated_month,
         'card_discount'    : card_discount,
@@ -219,7 +250,24 @@ def payments(username):
     }
 
     _path = f'Hotel/Database/Form/{order_ID}'
-    fire.sets(_path, passdict)
+    fire.sets(_path, upload_dict)
+
+    passdict = {
+        'Full Name of Customer'                        : firstname,
+        'Customer Status'                              : person_status,
+        'Date of Room Booked'                          : daymonth,
+        'Initial Price per Room (INR.)'                : "%.2f" % price,
+        'Percentage of Booked Room'                    : percentage_room_booked,
+        'Discount and Additional Price Validation (%)' : validation,
+        'Price after Validation'                       : "%.2f" % validated_price,
+        'Price Increased after Month Validation'       : "%.2f" % month_price,
+        'Card Type'                                    : cardtype,
+        'Card Discount (%)'                            : card_discount,
+        'Bank Discount (%)'                            : bank_discount,
+        'Final Price per Room'                         : "%.2f" % bank_price,
+        'Total Rooms Booked'                           : counter,
+        'Final Price (total)'                          : "%.2f" % (bank_price*counter),
+    }
 
     return render_template(
         "payment.html",

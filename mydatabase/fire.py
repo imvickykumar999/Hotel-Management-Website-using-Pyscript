@@ -8,6 +8,7 @@ path = {'databaseURL' : url}
 import firebase_admin
 # https://stackoverflow.com/a/44501290/11493297
 
+
 if not firebase_admin._apps:
     firebase_admin.initialize_app(cred, path)
 
