@@ -48,10 +48,15 @@ def index(username):
     details = fire.call(_path)
     print('=====(details)=====>', details)
 
+    _path = 'Hotel/Database/Customer'
+    Customer = fire.call(_path)
+    print('=====(Customer)=====>', Customer)
+
     return render_template(
         'index.html', 
         mydata=booked_room,
         details=details,
+        Customer=Customer,
         percentage_room_booked=percentage_room_booked,
         username=username,
     )
@@ -220,10 +225,12 @@ def payments(username):
 # ----------------------------------
 
     upload_dict = {
-        'First Name'    : firstname,
-        'Email ID'      : emailid,
-        'Is VIP ?'      : VIP,
-        'Final Price'   : "%.2f" % (bank_price*counter),
+        'First Name'        : firstname,
+        'Email ID'          : emailid,
+        'Is VIP ?'          : VIP,
+        'Total Booked Room' : counter,
+        'Booking Date'      : daymonth,
+        'Final Price'       : "%.2f" % (bank_price*counter),
     }
 
     _path = f'Hotel/Database/Form/{order_ID}'

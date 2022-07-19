@@ -121,6 +121,7 @@
         <h2>Customer Details</h2>
         <br>
 
+        <!-- 
         <table bgcolor=#e6dda5>
             <tr>
                 <th>Booking ID</th>
@@ -131,20 +132,64 @@
                 <tr>
                     <td>{{i}}</td>
                     <td>
-                        <table bgcolor="white">
-                            {% for a,b in j.items() %}
-                                <tr>
-                                    <td>{{a}}</td>
-                                    <td>{{b}}</td>
-                                </tr>
-                            {% endfor %}
-                        </table>
+                        <a data-toggle="collapse" href="#id{{i}}" role="button">
+
+                            <h5 style="color:black">
+                                View ({{j['Email ID']}})
+                            </h5>
+                        </a>
+
+                        <div class="collapse" id="id{{i}}">
+                            <table bgcolor="white">
+                                {% for a,b in j.items() %}
+                                    <tr>
+                                        <td>{{a}}</td>
+                                        <td>{{b}}</td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
                     </td>
                 </tr>
             {% endfor %}
-        </table>
-        <br><br>
+        </table> 
+        -->
 
+        <table bgcolor=#e6dda5>
+            <tr>
+                <th>Customer ID</th>
+                <th>No. of Times, Room Booked</th>
+                <th>More Detail</th>
+            </tr>
+
+            {% for i,j in Customer.items() %}
+                <tr>
+                    <td>{{i}}</td>
+                    <td>{{j}}</td>
+                    <td>
+                        <a data-toggle="collapse" href="#id{{i}}" role="button">
+
+                            <h5 style="color:black">
+                                View
+                            </h5>
+                        </a>
+
+                        <div class="collapse" id="id{{i}}">
+                            <table bgcolor="white">
+                                {% for a,b in details.items() %}
+                                    <tr>
+                                        <td>{{a}}</td>
+                                        <td>{{b}}</td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table> 
+
+        <br><br>
         <h2>{{percentage_room_booked}}% Rooms are Booked</h2>
         <br>
 
