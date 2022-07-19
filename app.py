@@ -27,6 +27,7 @@ class User(db.Model):
 @app.route('/<username>')
 def index(username):
     if not session.get(username):
+        flash("To see Customer Details, Login as Admin")
         return redirect(url_for("login"))
 
     from mydatabase import fire
@@ -40,20 +41,26 @@ def index(username):
 
     count = sum(map(lambda x : x == 'booked',
              list(booked_room.values())))
-
     percentage_room_booked = 100*count/len(booked_room)
+
+    from mydatabase import fire
+    _path = 'Hotel/Database/Form'
+    details = fire.call(_path)
+    print('=====(details)=====>', details)
 
     return render_template(
         'index.html', 
         mydata=booked_room,
+        details=details,
         percentage_room_booked=percentage_room_booked,
-        username=username
+        username=username,
     )
 
 
 @app.route("/payment/<username>", methods=["GET"])
 def payment(username):
     if not session.get(username):
+        flash("To Book Room, Login as Admin")
         return redirect(url_for("login"))
 
     from mydatabase import fire
@@ -92,7 +99,7 @@ def payments(username):
     cardtype    = request.form.get('cardtype')  # Payment Type Check
     banks       = request.form.get('banks')     # Banks Type Check
     VIP         = request.form.get('VIP')       # VIP Condition
-    daymonth    = request.form.get('daymonth')  # month Condition
+    daymonth    = request.form.get('daymonth')  # Month Condition
 
     from mydatabase import fire
     import random
@@ -213,40 +220,10 @@ def payments(username):
 # ----------------------------------
 
     upload_dict = {
-        'firstname'        : firstname,
-        'person_status'    : person_status,
-        'emailid'          : emailid,
-        'address'          : address,
-        'city'             : city,
-        'state'            : state,
-        'zip'              : zip,
-
-        'cardname'         : cardname,
-        'cardnumber'       : cardnumber,
-        'expmonth'         : expmonth,
-        'expyear'          : expyear,
-        'cvv'              : cvv,
-
-        'cardtype'         : cardtype,
-        'persontype'       : persontype,
-        'VIP'              : VIP,
-        'order_ID'         : order_ID,
-        '%_room_booked'    : percentage_room_booked,
-
-        'price'            : "%.2f" % price,
-        'card_price'       : "%.2f" % card_price,
-        'validated_price'  : "%.2f" % validated_price,
-        'month price'      : "%.2f" % month_price,
-        'bank_price'       : "%.2f" % bank_price,
-        'final_price'      : "%.2f" % (bank_price*counter),
-
-        'counter'          : counter,
-        'banks'            : banks,
-        'daymonth'         : daymonth,
-        'validation'       : validation,
-        'validated_month'  : validated_month,
-        'card_discount'    : card_discount,
-        'bank_discount'    : bank_discount,
+        'First Name'    : firstname,
+        'Email ID'      : emailid,
+        'Is VIP ?'      : VIP,
+        'Final Price'   : "%.2f" % (bank_price*counter),
     }
 
     _path = f'Hotel/Database/Form/{order_ID}'

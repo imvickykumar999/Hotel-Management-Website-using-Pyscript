@@ -13,6 +13,7 @@
         table {
         font-family: arial, sans-serif;
         border-collapse: collapse;
+        border: 7px solid #dddddd;
         width: 100%;
         }
 
@@ -94,7 +95,7 @@
         }
 
         .btn:hover {
-        background-color: #45a049;
+        background-color: #e6dda5;
         }
 
         span.price {
@@ -102,7 +103,6 @@
         color: grey;
         }
 
-        /* Responsive layout - when the screen is less than 800px wide, make the two columns stack on top of each other instead of next to each other (and change the direction - make the "cart" column go on top) */
         @media (max-width: 800px) {
         .row {
             flex-direction: column-reverse;
@@ -117,9 +117,37 @@
 
   <body>
     <center>
+
+        <h2>Customer Details</h2>
+        <br>
+
+        <table bgcolor=#e6dda5>
+            <tr>
+                <th>Booking ID</th>
+                <th>Status</th>
+            </tr>
+
+            {% for i,j in details.items() %}
+                <tr>
+                    <td>{{i}}</td>
+                    <td>
+                        <table bgcolor="white">
+                            {% for a,b in j.items() %}
+                                <tr>
+                                    <td>{{a}}</td>
+                                    <td>{{b}}</td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+        <br><br>
+
         <h2>{{percentage_room_booked}}% Rooms are Booked</h2>
         <br>
-        
+
         <table>
             <tr>
                 <th>Room Number</th>
@@ -133,6 +161,7 @@
                 </tr>
             {% endfor %}
         </table>
+        <br><br>
 
     </center>
   </body>
