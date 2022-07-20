@@ -121,73 +121,55 @@
         <h2>Customer Details</h2>
         <br>
 
-        <!-- 
-        <table bgcolor=#e6dda5>
-            <tr>
-                <th>Booking ID</th>
-                <th>Status</th>
-            </tr>
-
-            {% for i,j in details.items() %}
-                <tr>
-                    <td>{{i}}</td>
-                    <td>
-                        <a data-toggle="collapse" href="#id{{i}}" role="button">
-
-                            <h5 style="color:black">
-                                View ({{j['Email ID']}})
-                            </h5>
-                        </a>
-
-                        <div class="collapse" id="id{{i}}">
-                            <table bgcolor="white">
-                                {% for a,b in j.items() %}
-                                    <tr>
-                                        <td>{{a}}</td>
-                                        <td>{{b}}</td>
-                                    </tr>
-                                {% endfor %}
-                            </table>
-                        </div>
-                    </td>
-                </tr>
-            {% endfor %}
-        </table> 
-        -->
-
-        <table bgcolor=#e6dda5>
+        <table>
             <tr>
                 <th>Customer ID</th>
-                <th>No. of Times, Room Booked</th>
+                <th>Customer Type</th>
                 <th>More Detail</th>
             </tr>
 
             {% for i,j in Customer.items() %}
                 <tr>
                     <td>{{i}}</td>
-                    <td>{{j}}</td>
+                    <td>
+                        {{j['times']}} times room booked, 
+                        {% if j['isvip'] == 'Yes' %}
+                            (VIP Customer)
+                        {% elif j['times'] <=5 %}
+                            (New Customer)
+                        {% elif j['times'] >5 %}
+                            (Regular Customer)
+                        {% endif %}
+                    </td>
                     <td>
                         <a data-toggle="collapse" href="#id{{i}}" role="button">
-
                             <h5 style="color:black">
                                 View
                             </h5>
                         </a>
 
                         <div class="collapse" id="id{{i}}">
-                            <table>
+                            <table bgcolor="white">
                                 {% for a in details.values() %}
                                     {% if a['Email ID'] == i %}
                                         <tr>
                                             <td>
-                                                <table bgcolor="white">
-                                                    {% for g,f in a.items() %}
-                                                        <tr>
-                                                            <td>{{g}}</td>
-                                                            <td>{{f}}</td>
-                                                        </tr>
-                                                    {% endfor %}
-                                                </table>
+                                                <a data-toggle="collapse" href="#id{{a['Booking Date and Time'].split(' ')[1].replace(':', '')}}" role="button">
+                                                    <h5 style="color:black">
+                                                        Booking Time -> {{a['Booking Date and Time'].split(' ')[1]}}
+                                                    </h5>
+                                                </a>
+
+                                                <div class="collapse" id="id{{a['Booking Date and Time'].split(' ')[1].replace(':', '')}}">
+                                                    <table bgcolor="white">
+                                                        {% for g,f in a.items() %}
+                                                            <tr>
+                                                                <td>{{g}}</td>
+                                                                <td>{{f}}</td>
+                                                            </tr>
+                                                        {% endfor %}
+                                                    </table>
+                                                </div>
                                             </td>
                                         </tr>
                                     {% endif %}

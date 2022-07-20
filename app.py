@@ -90,21 +90,24 @@ def payments(username):
 
     firstname   = request.form['firstname']
     emailid     = request.form['emailid']
-    address     = request.form['address']
-    city        = request.form['city']
-    state       = request.form['state']
-    zip         = request.form['zip']
 
-    cardname    = request.form['cardname']
-    cardnumber  = request.form['cardnumber']
-    expmonth    = request.form['expmonth']
-    expyear     = request.form['expyear']
-    cvv         = request.form['cvv']
+    # address     = request.form['address']
+    # city        = request.form['city']
+    # state       = request.form['state']
+    # zip         = request.form['zip']
+
+    # cardname    = request.form['cardname']
+    # cardnumber  = request.form['cardnumber']
+    # expmonth    = request.form['expmonth']
+    # expyear     = request.form['expyear']
+    # cvv         = request.form['cvv']
 
     cardtype    = request.form.get('cardtype')  # Payment Type Check
     banks       = request.form.get('banks')     # Banks Type Check
-    VIP         = request.form.get('VIP')       # VIP Condition
-    daymonth    = request.form.get('daymonth')  # Month Condition
+
+    from datetime import datetime
+    month       = datetime.now().month  # Month Condition
+    VIP         = 'No'
 
     from mydatabase import fire
     import random
@@ -113,7 +116,7 @@ def payments(username):
     ename = emailid.split('@')[0].replace('.','_')
     domain = emailid.split('@')[1].split('.')[0]
 
-    _path = f'Hotel/Database/Customer/{ename+domain}'
+    _path = f'Hotel/Database/Customer/{ename+domain}/times'
     times = fire.call(_path)
 
     if times == None:
@@ -144,11 +147,17 @@ def payments(username):
     price = bank_price = month_price = card_price = validated_price = 10000 # per room price
     card_discount = bank_discount = validated_month = validation = 0
 
-    _path = f'Hotel/Database/Customer/{ename+domain}'
+    _path = f'Hotel/Database/Customer/{ename+domain}/times'
     persontype = fire.call(_path)
+    
+    _path = f'Hotel/Database/Customer/{ename+domain}/isvip'
+    getVIP = fire.call(_path)
+    if getVIP == None:
+        fire.sets(_path, 'No')
 
     if VIP == 'Yes':
         person_status = 'VIP Customer'
+        fire.sets(_path, 'Yes')
     elif persontype <= 5:
         person_status = 'New Customer'
         VIP = 'No'
@@ -180,9 +189,6 @@ def payments(username):
         elif persontype > 5:
             validation = 10
         validated_price += price*validation/100
-
-    month = int(daymonth.split('-')[1])
-    print('===(month)===> ', month)
 
     if month in [12, 1, 2]:
         validated_month = 40
@@ -225,12 +231,11 @@ def payments(username):
 # ----------------------------------
 
     upload_dict = {
-        'First Name'        : firstname,
-        'Email ID'          : ename+domain,
-        'Is VIP ?'          : VIP,
-        'Total Booked Room' : counter,
-        'Booking Date'      : daymonth,
-        'Final Price'       : "%.2f" % (bank_price*counter),
+        'First Name'             : firstname,
+        'Email ID'               : ename+domain,
+        'Total Booked Room'      : counter,
+        'Booking Date and Time'  : str(datetime.now()).split('.')[0],
+        'Final Price'            : "%.2f" % (bank_price*counter),
     }
 
     _path = f'Hotel/Database/Form/{order_ID}'
@@ -239,7 +244,7 @@ def payments(username):
     passdict = {
         'Full Name of Customer'                        : firstname,
         'Customer Status'                              : person_status,
-        'Date of Room Booked'                          : daymonth,
+        'Date and Time of Room Booked'                 : str(datetime.now()).split('.')[0],
         'Initial Price per Room (INR.)'                : "%.2f" % price,
         'Percentage of Booked Room'                    : percentage_room_booked,
         'Discount and Additional Price Validation (%)' : validation,
