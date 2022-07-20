@@ -175,12 +175,22 @@
                         </a>
 
                         <div class="collapse" id="id{{i}}">
-                            <table bgcolor="white">
-                                {% for a,b in details.items() %}
-                                    <tr>
-                                        <td>{{a}}</td>
-                                        <td>{{b}}</td>
-                                    </tr>
+                            <table>
+                                {% for a in details.values() %}
+                                    {% if a['Email ID'] == i %}
+                                        <tr>
+                                            <td>
+                                                <table bgcolor="white">
+                                                    {% for g,f in a.items() %}
+                                                        <tr>
+                                                            <td>{{g}}</td>
+                                                            <td>{{f}}</td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    {% endif %}
                                 {% endfor %}
                             </table>
                         </div>

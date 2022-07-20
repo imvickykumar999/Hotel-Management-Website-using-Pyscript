@@ -226,7 +226,7 @@ def payments(username):
 
     upload_dict = {
         'First Name'        : firstname,
-        'Email ID'          : emailid,
+        'Email ID'          : ename+domain,
         'Is VIP ?'          : VIP,
         'Total Booked Room' : counter,
         'Booking Date'      : daymonth,
