@@ -151,7 +151,7 @@
                         <div class="collapse" id="id{{i}}">
                             <table bgcolor="white">
                                 {% for a in details.values() %}
-                                    {% if a['Email ID'] == i %}
+                                    {% if a['Customer ID'] == i %}
                                         <tr>
                                             <td>
                                                 <a data-toggle="collapse" href="#id{{a['Booking Date and Time'].split(' ')[1].replace(':', '')}}" role="button">

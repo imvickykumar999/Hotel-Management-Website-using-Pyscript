@@ -232,7 +232,8 @@ def payments(username):
 
     upload_dict = {
         'First Name'             : firstname,
-        'Email ID'               : ename+domain,
+        'Customer ID'            : ename+domain,
+        'Email ID'               : emailid,
         'Total Booked Room'      : counter,
         'Booking Date and Time'  : str(datetime.now()).split('.')[0],
         'Final Price'            : "%.2f" % (bank_price*counter),
