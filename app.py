@@ -76,9 +76,11 @@ def payment(username):
         if d == 'empty':
             new_dict[k] = d
 
+    from datetime import datetime
     return render_template("payment.html",
                             username=username,
                             passdict={},
+                            bookmonth=str(datetime.now()).split(' ')[0],
                             mydata=new_dict,
                         )
 
@@ -90,6 +92,7 @@ def payments(username):
 
     firstname   = request.form['firstname']
     emailid     = request.form['emailid']
+    bookmonth   = request.form['bookmonth']
 
     # address     = request.form['address']
     # city        = request.form['city']
@@ -190,9 +193,11 @@ def payments(username):
             validation = 10
         validated_price += price*validation/100
 
-    if month in [12, 1, 2]:
+    if int(bookmonth.split('-')[1]) in [12, 1, 2]:
         validated_month = 40
-    month_price += validated_price*validated_month/100
+        month_price += validated_price*validated_month/100
+    else:
+        month_price = validated_price
 
     print('===(banks)===> ', banks)
     if cardtype == 'Credit':
@@ -227,6 +232,7 @@ def payments(username):
             bank_price = month_price
 
     print('===(bank_price x total_rooms)===> ', bank_price*counter)
+    print('===(bookmonth)===> ', f"{bookmonth} {str(datetime.now()).split('.')[0].split(' ')[1]}")
 
 # ----------------------------------
 
@@ -235,7 +241,7 @@ def payments(username):
         'Customer ID'            : ename+domain,
         'Email ID'               : emailid,
         'Total Booked Room'      : counter,
-        'Booking Date and Time'  : str(datetime.now()).split('.')[0],
+        'Booking Date and Time'  : f"{bookmonth} {str(datetime.now()).split('.')[0].split(' ')[1]}",
         'Final Price'            : "%.2f" % (bank_price*counter),
     }
 

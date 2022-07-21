@@ -118,6 +118,14 @@
   <body>
     <center>
 
+        <div class="alert alert-primary" role="alert">
+        <a style="color:blue;" class="navbar-brand" href="/payment/admin">
+            <strong>
+            Room Booking
+            </strong>
+        </a>
+        </div>
+
         <h2>Customer Details</h2>
         <br>
 
@@ -185,7 +193,10 @@
         <h2>{{percentage_room_booked}}% Rooms are Booked</h2>
         <br>
 
-        <table>
+        <p>Click the button to sort the table numerically</p>
+        <p><button onclick="sortTable()">Sort</button></p>
+
+        <table id="myTable">
             <tr>
                 <th>Room Number</th>
                 <th>Status</th>
@@ -199,6 +210,35 @@
             {% endfor %}
         </table>
         <br><br>
+
+        <script>
+            function sortTable() {
+              var table, rows, switching, i, x, y, shouldSwitch;
+              table = document.getElementById("myTable");
+              switching = true;
+
+              while (switching) {
+                switching = false;
+                rows = table.rows;
+
+                for (i = 1; i < (rows.length - 1); i++) {
+                  shouldSwitch = false;
+
+                  x = rows[i].getElementsByTagName("td")[0];
+                  y = rows[i + 1].getElementsByTagName("td")[0];
+                
+                  if (Number(x.innerHTML.split('_')[1]) > Number(y.innerHTML.split('_')[1])) {
+                    shouldSwitch = true;
+                    break;
+                  }
+                }
+                if (shouldSwitch) {
+                  rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                  switching = true;
+                }
+              }
+            }
+        </script>
 
     </center>
   </body>
