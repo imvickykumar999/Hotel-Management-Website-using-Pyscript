@@ -33,6 +33,7 @@ def index(username):
     from mydatabase import fire
     _path = 'Hotel/Database/Rooms'
     booked_room = fire.call(_path)
+    # print('=====(booked_room)=====>', booked_room)
 
     new_dict = {}
     for k, d in booked_room.items():
@@ -46,19 +47,48 @@ def index(username):
     from mydatabase import fire
     _path = 'Hotel/Database/Form'
     details = fire.call(_path)
-    print('=====(details)=====>', details)
+    # print('=====(details)=====>', details)
 
     _path = 'Hotel/Database/Customer'
     Customer = fire.call(_path)
-    print('=====(Customer)=====>', Customer)
+    # print('=====(Customer)=====>', Customer)
 
     return render_template(
         'index.html', 
-        mydata=booked_room,
         details=details,
         Customer=Customer,
         percentage_room_booked=percentage_room_booked,
         username=username,
+    )
+
+
+@app.route("/mytable", methods=["GET"])
+def mytable():
+
+    from mydatabase import fire
+    _path = 'Hotel/Database/Rooms'
+    booked_room = fire.call(_path)
+
+    new_dict = {}
+    for k, d in booked_room.items():
+        if d == 'empty':
+            new_dict[k] = d
+
+    count = sum(map(lambda x : x == 'booked',
+             list(booked_room.values())))
+    percentage_room_booked = 100*count/len(booked_room)
+
+    return render_template(
+        'mytable.html',
+        booked_room=booked_room,
+        percentage_room_booked=percentage_room_booked,
+    )
+
+
+@app.route("/diagram", methods=["GET"])
+def diagram():
+    return render_template(
+        'diagram.html',
     )
 
 

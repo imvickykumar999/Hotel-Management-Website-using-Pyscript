@@ -1,0 +1,233 @@
+
+{% extends "base.html"%}
+{% block content %}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />
+        <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+        <style>
+            table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            border: 7px solid #dddddd;
+            width: 100%;
+            }
+    
+            td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+            }
+    
+            tr:nth-child(even) {
+            background-color: #dddddd;
+            }
+    
+            .row {
+            display: -ms-flexbox; /* IE10 */
+            display: flex;
+            -ms-flex-wrap: wrap; /* IE10 */
+            flex-wrap: wrap;
+            margin: 0 -16px;
+            }
+    
+            .col-25 {
+            -ms-flex: 25%; /* IE10 */
+            flex: 25%;
+            }
+    
+            .col-50 {
+            -ms-flex: 50%; /* IE10 */
+            flex: 50%;
+            }
+    
+            .col-75 {
+            -ms-flex: 75%; /* IE10 */
+            flex: 75%;
+            }
+    
+            .col-25,
+            .col-50,
+            .col-75 {
+            padding: 0 16px;
+            }
+    
+            .container {
+            background-color: #f2f2f2;
+            padding: 5px 20px 15px 20px;
+            border: 1px solid lightgrey;
+            border-radius: 3px;
+            }
+    
+            input[type=text] {
+            width: 100%;
+            margin-bottom: 20px;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            }
+    
+            label {
+            margin-bottom: 10px;
+            display: block;
+            }
+    
+            .icon-container {
+            margin-bottom: 20px;
+            padding: 7px 0;
+            font-size: 24px;
+            }
+    
+            .btn {
+            background-color: #04AA6D;
+            color: white;
+            padding: 12px;
+            margin: 10px 0;
+            border: none;
+            width: 100%;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 17px;
+            }
+    
+            .btn:hover {
+            background-color: #e6dda5;
+            }
+    
+            span.price {
+            float: right;
+            color: grey;
+            }
+    
+            @media (max-width: 800px) {
+            .row {
+                flex-direction: column-reverse;
+            }
+            .col-25 {
+                margin-bottom: 20px;
+            }
+            }
+        </style>
+    </head>
+
+    <body>
+        
+        <center>
+            <br><br>
+            <div class="alert alert-primary" role="alert">
+                <h1>
+                    {{percentage_room_booked}}% Rooms are Booked
+                </h1>
+                <br>
+
+                <div class="dropdown-divider"></div>
+                <br>
+
+                <h5 style="color: red">Click the button below to sort the table</h5>
+                <p>
+                    <div class="alert alert-danger" role="alert">
+                        <button onclick="sortTable()">
+                            <h5>
+                                Sort Numerically
+                            </h5>
+                        </button>
+                    </div>
+                </p>
+                <br>
+            </div>
+        </center>
+
+        <table id="myTable" class="table table-dark">
+            <thead>
+                <tr>
+                    <th scope="col">Room Number</th>
+                    <th scope="col">Status</th>
+                </tr>
+            </thead>
+
+            <tbody id="content"></tbody>
+        </table>
+
+    <py-script>
+        class Person:
+            def __init__(self, first_name):
+                self.firstname = first_name
+
+        class Student(Person):
+            def __init__(self, first_name, university):
+                self.university = university
+                super().__init__(first_name)
+            
+            def __str__(self):
+                return "Student: %s University: %s" % (self.firstname, self.university)
+            
+            def create_html_element(self):
+                tr_element = document.createElement('tr')
+                first_name_element = document.createElement('td')
+                university_element = document.createElement('td')
+
+                first_name_element.innerText = self.firstname
+                university_element.innerText = self.university
+                
+                tr_element.append(first_name_element)
+                tr_element.append(university_element)
+                
+                return tr_element
+
+        def create_students(): 
+            lst = []
+            for i in {{booked_room}}:
+                stud = Student(i, {{booked_room}}[i])
+                lst.append(stud)    
+            return lst
+
+        def populate_table(students):
+            element = document.getElementById("content")
+
+            for student in students:
+                element.append(student.create_html_element())
+
+
+        def main():
+            students = create_students()
+            populate_table(students)
+            
+        main()
+    </py-script>
+
+    <script>
+        function sortTable() {
+        var table, rows, switching, i, x, y, shouldSwitch;
+        table = document.getElementById("myTable");
+        switching = true;
+
+        while (switching) {
+            switching = false;
+            rows = table.rows;
+
+            for (i = 1; i < (rows.length - 1); i++) {
+            shouldSwitch = false;
+
+            x = rows[i].getElementsByTagName("td")[0];
+            y = rows[i + 1].getElementsByTagName("td")[0];
+            
+            if (Number(x.innerHTML.split('_')[1]) > Number(y.innerHTML.split('_')[1])) {
+                shouldSwitch = true;
+                break;
+            }
+            }
+            if (shouldSwitch) {
+            rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+            switching = true;
+            }
+        }
+        }
+    </script>
+  </body>
+</html>
+
+{% endblock %}
