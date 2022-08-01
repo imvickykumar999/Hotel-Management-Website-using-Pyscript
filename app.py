@@ -1,4 +1,9 @@
 
+
+# https://stackoverflow.com/a/62814525/11493297
+# pip install sqlalchemy --upgrade
+
+
 from flask import Flask, render_template, request, \
 url_for, redirect, flash, session, abort
 
