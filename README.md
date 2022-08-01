@@ -1,4 +1,4 @@
-# >>> [Hotel Management Project](https://neosalpha.herokuapp.com/mytable) using [Pyscript](https://pyscript.net/) and Flask
+# >>> Deployed [Hotel Management Project](https://neosalpha.herokuapp.com/mytable) using [Pyscript](https://pyscript.net/) and Flask
 
 -------------------------------------------------
 
