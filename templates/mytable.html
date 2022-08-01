@@ -153,50 +153,50 @@
         </table>
 
     <py-script>
-        class Person:
-            def __init__(self, first_name):
-                self.firstname = first_name
+class Person:
+    def __init__(self, room_name):
+        self.roomname = room_name
 
-        class Student(Person):
-            def __init__(self, first_name, university):
-                self.university = university
-                super().__init__(first_name)
-            
-            def __str__(self):
-                return "Student: %s University: %s" % (self.firstname, self.university)
-            
-            def create_html_element(self):
-                tr_element = document.createElement('tr')
-                first_name_element = document.createElement('td')
-                university_element = document.createElement('td')
+class Student(Person):
+    def __init__(self, room_name, status):
+        self.status = status
+        super().__init__(room_name)
+    
+    def __str__(self):
+        return "Student: %s University: %s" % (self.roomname, self.status)
+    
+    def create_html_element(self):
+        tr_element = document.createElement('tr')
+        room_name_element = document.createElement('td')
+        status_element = document.createElement('td')
 
-                first_name_element.innerText = self.firstname
-                university_element.innerText = self.university
-                
-                tr_element.append(first_name_element)
-                tr_element.append(university_element)
-                
-                return tr_element
+        room_name_element.innerText = self.roomname
+        status_element.innerText = self.status
+        
+        tr_element.append(room_name_element)
+        tr_element.append(status_element)
+        
+        return tr_element
 
-        def create_students(): 
-            lst = []
-            for i in {{booked_room}}:
-                stud = Student(i, {{booked_room}}[i])
-                lst.append(stud)    
-            return lst
+def create_students(): 
+    lst = []
+    for i in {{booked_room}}:
+        stud = Student(i, {{booked_room}}[i])
+        lst.append(stud)    
+    return lst
 
-        def populate_table(students):
-            element = document.getElementById("content")
+def populate_table(students):
+    element = document.getElementById("content")
 
-            for student in students:
-                element.append(student.create_html_element())
+    for student in students:
+        element.append(student.create_html_element())
 
 
-        def main():
-            students = create_students()
-            populate_table(students)
-            
-        main()
+def main():
+    students = create_students()
+    populate_table(students)
+    
+main()
     </py-script>
 
     <script>

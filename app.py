@@ -1,8 +1,6 @@
 
-
 # https://stackoverflow.com/a/62814525/11493297
 # pip install sqlalchemy --upgrade
-
 
 from flask import Flask, render_template, request, \
 url_for, redirect, flash, session, abort
@@ -87,13 +85,6 @@ def mytable():
         'mytable.html',
         booked_room=booked_room,
         percentage_room_booked=percentage_room_booked,
-    )
-
-
-@app.route("/diagram", methods=["GET"])
-def diagram():
-    return render_template(
-        'diagram.html',
     )
 
 
