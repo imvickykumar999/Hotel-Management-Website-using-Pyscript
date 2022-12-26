@@ -1,8 +1,8 @@
-# >>> Deployed [Hotel Management Project](https://neosalpha.herokuapp.com/mytable) using [Pyscript](https://pyscript.net/) and Flask
+## Deployed [Hotel Management Project](https://neosalpha.herokuapp.com/mytable) using [Pyscript](https://pyscript.net/) and Flask
 
 -------------------------------------------------
 
-## >>> Add the following lines to your html file in `<head>` tag:
+### >>> Add the following lines to your html file in `<head>` tag:
 
     <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />
     <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
