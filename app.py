@@ -5,7 +5,7 @@
 from flask import Flask, render_template, request, \
 url_for, redirect, flash, session, abort
 
-from flask_sqlalchemy import sqlalchemy, SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
@@ -308,7 +308,7 @@ def create_db():
     db.create_all()
 
 
-# @app.route("/signup/", methods=["GET", "POST"]) # page for admin only
+@app.route("/signup/", methods=["GET", "POST"]) # page for admin only
 def signup():
     if request.method == "POST":
         username = request.form['username']
@@ -327,7 +327,7 @@ def signup():
 
         try:
             db.session.commit()
-        except sqlalchemy.exc.IntegrityError:
+        except:
             flash("Username {u} is not available.".format(u=username))
             return redirect(url_for('signup'))
 
@@ -368,4 +368,7 @@ def logout(username):
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True,
+            port=5000, 
+            host='0.0.0.0',
+            )
